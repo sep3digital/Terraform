@@ -15,8 +15,11 @@ provider "aws" {
 }
 
 variable "subnet_prefix" {
-    type = list
     description = "cidr block for the subnet"
+}
+
+variable "subnet_id" {
+    description = "id of the subnet"
 }
 
 # Create a VPC
@@ -62,6 +65,12 @@ resource "aws_route_table" "rt-staging1" {
   tags = {
     Name = "rt-staging1"
   }
+}
+
+# Associate a subnet to a route table
+resource "aws_route_table_association" "pub-subnet-1" {
+  subnet_id      = var.subnet_id[0]
+  route_table_id = aws_route_table.rt-staging1.id
 }
 
 # Create an IGW
